@@ -277,18 +277,24 @@ function NotificationLib.Notify(title, message, duration, icon)
     iconLabel.Position = UDim2.new(0, 10, 0, 10)
     iconLabel.Size = UDim2.new(0, iconSize, 0, iconSize)
     iconLabel.Parent = frame
-
-    -- Title Label
-    local titleLabel = Instance.new("TextLabel")
-    titleLabel.Font = Enum.Font.SourceSansBold
-    titleLabel.TextSize = 18
-    titleLabel.Text = title
-    titleLabel.TextColor3 = Color3.new(1, 1, 1)
-    titleLabel.BackgroundTransparency = 1
-    titleLabel.Position = UDim2.new(0, iconSize + 20, 0, 10)
-    titleLabel.Size = UDim2.new(1, -iconSize - 30, 0, 20)
-    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    titleLabel.Parent = frame
+	
+	-- Title Label
+	local function safeAdd(value, number)
+	    return (value or 0) + number
+	end
+	
+	local titleLabel = Instance.new("TextLabel")
+	titleLabel.Font = Enum.Font.SourceSansBold
+	titleLabel.TextSize = 18
+	titleLabel.Text = title
+	titleLabel.TextColor3 = Color3.new(1, 1, 1)
+	titleLabel.BackgroundTransparency = 1
+	
+	local iconSize = 50
+	titleLabel.Position = UDim2.new(0, safeAdd(iconSize, 20), 0, 10)
+	titleLabel.Size = UDim2.new(1, -safeAdd(iconSize, 30), 0, 20)
+	titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+	titleLabel.Parent = frame
 
     -- Message Label
     local messageLabel = Instance.new("TextLabel")
