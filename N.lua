@@ -244,7 +244,7 @@ end
 
 notificationwindow.ChildRemoved:Connect(function()
     for i,v in pairs(notificationwindow:GetChildren()) do
-        bettertween(v, UDim2.new(1, v.Position.X.Offset, 1, -(150 + 80 * (i - 1))), Enum.EasingDirection.In, Enum.EasingStyle.Sine, 0.15, true)
+	bettertween2(v, UDim2.new(1, v.Position.X.Offset, 1, -(150 + 80 * (i - 1))), Enum.EasingDirection.In, Enum.EasingStyle.Sine, 0.15, true)
     end
 end)
 
@@ -269,14 +269,17 @@ function NotificationLib.Notify(title, message, duration, icon)
     local uiCorner = Instance.new("UICorner")
     uiCorner.CornerRadius = UDim.new(0, 6)
     uiCorner.Parent = frame
+	
+	local iconSize = 50 -- Define iconSize before using it
+	
+	-- Icon
+	local iconLabel = Instance.new("ImageLabel")
+	iconLabel.Image = downloadAsset(icon)
+	iconLabel.BackgroundTransparency = 1
+	iconLabel.Position = UDim2.new(0, 10, 0, 10)
+	iconLabel.Size = UDim2.new(0, iconSize, 0, iconSize)
+	iconLabel.Parent = frame
 
-    -- Icon
-    local iconLabel = Instance.new("ImageLabel")
-    iconLabel.Image = downloadAsset(icon)
-    iconLabel.BackgroundTransparency = 1
-    iconLabel.Position = UDim2.new(0, 10, 0, 10)
-    iconLabel.Size = UDim2.new(0, iconSize, 0, iconSize)
-    iconLabel.Parent = frame
 	
 	-- Title Label
 	local function safeAdd(value, number)
@@ -289,8 +292,6 @@ function NotificationLib.Notify(title, message, duration, icon)
 	titleLabel.Text = title
 	titleLabel.TextColor3 = Color3.new(1, 1, 1)
 	titleLabel.BackgroundTransparency = 1
-	
-	local iconSize = 50
 	titleLabel.Position = UDim2.new(0, safeAdd(iconSize, 20), 0, 10)
 	titleLabel.Size = UDim2.new(1, -safeAdd(iconSize, 30), 0, 20)
 	titleLabel.TextXAlignment = Enum.TextXAlignment.Left
