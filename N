@@ -252,10 +252,11 @@ end)
 function NotificationLib.Notify(title, message, duration, icon)
     duration = duration or 5
     icon = icon or "exiled/assets/InfoNotification.png"
-
-    local size = math.max(TextService:GetTextSize(message, 13, Enum.Font.Gotham, Vector2.new(99999, 99999)).X + 60, 266)
+    
+    local size = math.max(textService:GetTextSize(message, 14, Enum.Font.Gotham, Vector2.new(99999, 99999)).X + 60, 266)
     local offset = #notificationWindow:GetChildren()
 
+    -- Create the notification frame
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, size, 0, 75)
     frame.Position = UDim2.new(1, 0, 1, -(150 + 80 * offset))
@@ -264,54 +265,58 @@ function NotificationLib.Notify(title, message, duration, icon)
     frame.BorderSizePixel = 0
     frame.Parent = notificationWindow
 
+    -- Corner rounding
     local uiCorner = Instance.new("UICorner")
     uiCorner.CornerRadius = UDim.new(0, 6)
     uiCorner.Parent = frame
 
+    -- Icon
     local iconLabel = Instance.new("ImageLabel")
     iconLabel.Image = downloadAsset(icon)
     iconLabel.BackgroundTransparency = 1
     iconLabel.Position = UDim2.new(0, 10, 0, 10)
-    iconLabel.Size = UDim2.new(0, 55, 0, 55)
+    iconLabel.Size = UDim2.new(0, iconSize, 0, iconSize)
     iconLabel.Parent = frame
 
+    -- Title Label
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Font = Enum.Font.SourceSansBold
     titleLabel.TextSize = 18
     titleLabel.Text = title
     titleLabel.TextColor3 = Color3.new(1, 1, 1)
     titleLabel.BackgroundTransparency = 1
-    titleLabel.Position = UDim2.new(0, 75, 0, 10)
-    titleLabel.Size = UDim2.new(1, -85, 0, 20)
+    titleLabel.Position = UDim2.new(0, iconSize + 20, 0, 10)
+    titleLabel.Size = UDim2.new(1, -iconSize - 30, 0, 20)
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.Parent = frame
 
+    -- Message Label
     local messageLabel = Instance.new("TextLabel")
     messageLabel.Font = Enum.Font.SourceSans
     messageLabel.TextSize = 14
     messageLabel.Text = message
     messageLabel.TextColor3 = Color3.new(0.8, 0.8, 0.8)
     messageLabel.BackgroundTransparency = 1
-    messageLabel.Position = UDim2.new(0, 75, 0, 35)
-    messageLabel.Size = UDim2.new(1, -85, 0, 30)
+    messageLabel.Position = UDim2.new(0, iconSize + 20, 0, 35)
+    messageLabel.Size = UDim2.new(1, -iconSize - 30, 0, 30)
     messageLabel.TextXAlignment = Enum.TextXAlignment.Left
     messageLabel.TextYAlignment = Enum.TextYAlignment.Top
     messageLabel.TextWrapped = true
     messageLabel.Parent = frame
 
-    -- Animation
-    frame.Position = UDim2.new(1, 0, 1, -(150 + 80 * offset))
-    local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
-    local tween = TweenService:Create(frame, tweenInfo, {Position = UDim2.new(1, -size - 20, 1, -(150 + 80 * offset))})
-    tween:Play()
+    -- Animation for showing the notification
+    local tweenInfoIn = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+    local tweenIn = tweenService:Create(frame, tweenInfoIn, {Position = UDim2.new(1, -size - 20, 1, -(150 + 80 * offset))})
+    tweenIn:Play()
 
     -- Remove notification after duration
     task.delay(duration, function()
-        local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.In)
-        local tween = TweenService:Create(frame, tweenInfo, {Position = UDim2.new(1, 20, 1, frame.Position.Y.Offset)})
-        tween:Play()
-        tween.Completed:Wait()
+        local tweenInfoOut = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.In)
+        local tweenOut = tweenService:Create(frame, tweenInfoOut, {Position = UDim2.new(1, 20, 1, frame.Position.Y.Offset)})
+        tweenOut:Play()
+        tweenOut.Completed:Wait()
         frame:Destroy()
     end)
 end
+
 return NotificationLib
