@@ -253,7 +253,10 @@ function NotificationLib.Notify(title, message, duration, icon)
     duration = duration or 5
     icon = icon or "exiled/assets/InfoNotification.png"
     
-    local size = math.max(textService:GetTextSize(message, 14, Enum.Font.Gotham, Vector2.new(99999, 99999)).X + 60, 266)
+    local size = 266
+    pcall(function()
+        size = math.max(textService:GetTextSize(message, 14, Enum.Font.Gotham, Vector2.new(99999, 99999)).X + 60, 266)
+    end)
     local offset = #notificationwindow:GetChildren()
 
     -- Create the notification frame
@@ -311,18 +314,21 @@ function NotificationLib.Notify(title, message, duration, icon)
     messageLabel.TextWrapped = true
     messageLabel.Parent = frame
 
-    -- Animation for showing the notification
     local tweenInfoIn = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
     local tweenIn = tweenService:Create(frame, tweenInfoIn, {Position = UDim2.new(1, -size - 20, 1, -(150 + 80 * offset))})
     tweenIn:Play()
 
     -- Remove notification after duration
     task.delay(duration, function()
-        local tweenInfoOut = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.In)
-        local tweenOut = tweenService:Create(frame, tweenInfoOut, {Position = UDim2.new(1, 20, 1, frame.Position.Y.Offset)})
-        tweenOut:Play()
-        tweenOut.Completed:Wait()
-        frame:Destroy()
+        if frame and frame.Parent then
+            local tweenInfoOut = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.In)
+            local tweenOut = tweenService:Create(frame, tweenInfoOut, {Position = UDim2.new(1, 20, 1, frame.Position.Y.Offset)})
+            tweenOut:Play()
+            tweenOut.Completed:Wait()
+            if frame and frame.Parent then
+                frame:Destroy()
+            end
+        end
     end)
 end
 
