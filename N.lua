@@ -320,3 +320,4 @@ function NotificationLib.Notify(title, message, duration, icon)
 end
 
 return NotificationLib
+
