@@ -1,3 +1,5 @@
+local NotificationLib = {}
+
 local runService = game:GetService("RunService")
 local inputService = game:GetService("UserInputService")
 local httpService = game:GetService("HttpService")
@@ -247,14 +249,12 @@ notificationwindow.ChildRemoved:Connect(function()
 end)
 
 
-local function Notify(title, message, duration, icon)
+function NotificationLib.Notify(title, message, duration, icon)
     duration = duration or 5
     icon = icon or "exiled/assets/InfoNotification.png"
 
-
-    local size = math.max(textService:GetTextSize(removeTags(message), 13, Enum.Font.Gotham, Vector2.new(99999, 99999)).X + 60, 266)
-    local offset = #notificationwindow:GetChildren()
-
+    local size = math.max(TextService:GetTextSize(message, 13, Enum.Font.Gotham, Vector2.new(99999, 99999)).X + 60, 266)
+    local offset = #notificationWindow:GetChildren()
 
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, size, 0, 75)
@@ -262,21 +262,18 @@ local function Notify(title, message, duration, icon)
     frame.BackgroundColor3 = Color3.new(0, 0, 0)
     frame.BackgroundTransparency = 0.5
     frame.BorderSizePixel = 0
-    frame.Parent = notificationwindow
-
+    frame.Parent = notificationWindow
 
     local uiCorner = Instance.new("UICorner")
     uiCorner.CornerRadius = UDim.new(0, 6)
     uiCorner.Parent = frame
 
-
     local iconLabel = Instance.new("ImageLabel")
-    iconLabel.Image = downloadVapeAsset(icon)
+    iconLabel.Image = downloadAsset(icon)
     iconLabel.BackgroundTransparency = 1
     iconLabel.Position = UDim2.new(0, 10, 0, 10)
     iconLabel.Size = UDim2.new(0, 55, 0, 55)
     iconLabel.Parent = frame
-
 
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Font = Enum.Font.SourceSansBold
@@ -288,7 +285,6 @@ local function Notify(title, message, duration, icon)
     titleLabel.Size = UDim2.new(1, -85, 0, 20)
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.Parent = frame
-
 
     local messageLabel = Instance.new("TextLabel")
     messageLabel.Font = Enum.Font.SourceSans
@@ -303,21 +299,19 @@ local function Notify(title, message, duration, icon)
     messageLabel.TextWrapped = true
     messageLabel.Parent = frame
 
-
     -- Animation
     frame.Position = UDim2.new(1, 0, 1, -(150 + 80 * offset))
     local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
-    local tween = tweenService:Create(frame, tweenInfo, {Position = UDim2.new(1, -size - 20, 1, -(150 + 80 * offset))})
+    local tween = TweenService:Create(frame, tweenInfo, {Position = UDim2.new(1, -size - 20, 1, -(150 + 80 * offset))})
     tween:Play()
-
 
     -- Remove notification after duration
     task.delay(duration, function()
         local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.In)
-        local tween = tweenService:Create(frame, tweenInfo, {Position = UDim2.new(1, 20, 1, frame.Position.Y.Offset)})
+        local tween = TweenService:Create(frame, tweenInfo, {Position = UDim2.new(1, 20, 1, frame.Position.Y.Offset)})
         tween:Play()
         tween.Completed:Wait()
         frame:Destroy()
     end)
 end
-
+return NotificationLib
