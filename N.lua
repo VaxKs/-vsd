@@ -254,7 +254,7 @@ function NotificationLib.Notify(title, message, duration, icon)
     icon = icon or "exiled/assets/InfoNotification.png"
     
     local size = math.max(textService:GetTextSize(message, 14, Enum.Font.Gotham, Vector2.new(99999, 99999)).X + 60, 266)
-    local offset = #notificationWindow:GetChildren()
+    local offset = #notificationwindow:GetChildren()
 
     -- Create the notification frame
     local frame = Instance.new("Frame")
@@ -263,7 +263,7 @@ function NotificationLib.Notify(title, message, duration, icon)
     frame.BackgroundColor3 = Color3.new(0, 0, 0)
     frame.BackgroundTransparency = 0.5
     frame.BorderSizePixel = 0
-    frame.Parent = notificationWindow
+    frame.Parent = notificationwindow
 
     -- Corner rounding
     local uiCorner = Instance.new("UICorner")
