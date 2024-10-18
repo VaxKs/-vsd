@@ -161,7 +161,7 @@ end
 
 
 
-local function downloadVapeAsset(path)
+local function downloadAsset(path)
     if customassetcheck then
         if not isfile(path) then
             task.spawn(function()
